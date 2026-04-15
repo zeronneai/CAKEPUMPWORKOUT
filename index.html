@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cake Pump Workout — Brenda Jazmín</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #F4A4A4;
+    --rose: #E8526A;
+    --deep-rose: #C93055;
+    --cream: #FDF6F0;
+    --warm-white: #FFFAF7;
+    --dark: #1A0A0F;
+    --dark-mid: #2E1220;
+    --gold: #D4AF6A;
+    --gold-light: #F0D49A;
+    --text-muted: rgba(255,255,255,0.6);
+    --text-body: rgba(255,255,255,0.88);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  /* ─── CURSOR ─────────────────────────────── */
+  .cursor {
+    position: fixed; width: 12px; height: 12px;
+    background: var(--rose); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1.5px solid rgba(232,82,106,0.5); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+
+  /* ─── NAV ─────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100; padding: 1.25rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(26,10,15,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(244,164,164,0.12);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem; letter-spacing: 0.1em;
+    color: #fff; text-decoration: none;
+  }
+  .nav-logo span { color: var(--rose); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--text-body); text-decoration: none;
+    font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--blush); }
+  .nav-cta {
+    background: var(--rose); color: #fff !important;
+    padding: 0.55rem 1.4rem; border-radius: 100px;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--deep-rose) !important; transform: scale(1.04); }
+
+  /* ─── HERO ────────────────────────────────── */
+  .hero {
+    min-height: 100vh; position: relative;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 70% at 70% 50%, rgba(200,48,85,0.18) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 60% at 20% 80%, rgba(212,175,106,0.08) 0%, transparent 60%),
+                linear-gradient(135deg, #1A0A0F 0%, #2E1220 50%, #1A0A0F 100%);
+  }
+  .hero-noise {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 8rem 2.5rem 4rem 8vw;
+    max-width: 700px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(244,164,164,0.12); border: 1px solid rgba(244,164,164,0.25);
+    border-radius: 100px; padding: 0.4rem 1rem;
+    font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--blush); margin-bottom: 1.5rem;
+    animation: fadeDown 0.8s ease both;
+  }
+  .hero-badge::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--rose); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 9vw, 8rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    animation: fadeUp 0.9s 0.15s ease both;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    color: var(--rose);
+    display: block; font-size: 0.75em;
+  }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--text-body);
+    line-height: 1.65; max-width: 480px;
+    margin: 1.5rem 0 2.5rem;
+    animation: fadeUp 0.9s 0.3s ease both;
+    font-weight: 300;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp 0.9s 0.45s ease both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--rose) 0%, var(--deep-rose) 100%);
+    color: #fff; padding: 1rem 2.2rem;
+    border-radius: 100px; font-size: 0.95rem;
+    font-weight: 600; letter-spacing: 0.04em;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 8px 30px rgba(200,48,85,0.35);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 40px rgba(200,48,85,0.45);
+  }
+  .btn-secondary {
+    background: transparent; color: #fff;
+    padding: 1rem 2rem; border-radius: 100px;
+    font-size: 0.9rem; font-weight: 500;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    text-decoration: none; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover {
+    border-color: var(--blush);
+    background: rgba(244,164,164,0.08);
+  }
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 4rem;
+    animation: fadeUp 0.9s 0.6s ease both;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem; letter-spacing: 0.05em;
+    color: var(--gold);
+  }
+  .stat-label { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.1rem; }
+
+  .hero-image-side {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 45%; overflow: hidden;
+    animation: fadeIn 1.2s 0.2s ease both;
+  }
+  .hero-image-side::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 60%; z-index: 1;
+    background: linear-gradient(to right, var(--dark) 0%, transparent 100%);
+  }
+  .hero-image-side::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 30%; z-index: 1;
+    background: linear-gradient(to top, var(--dark) 0%, transparent 100%);
+  }
+  .hero-img-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(200,48,85,0.3) 0%, rgba(26,10,15,0.8) 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem;
+  }
+  .hero-img-placeholder .ig-handle {
+    font-size: 1rem; color: rgba(255,255,255,0.6);
+    font-style: italic;
+  }
+
+  /* ─── VIDEO PREVIEW ───────────────────────── */
+  .preview-section {
+    padding: 6rem 2.5rem;
+    text-align: center;
+    background: linear-gradient(180deg, var(--dark) 0%, #1f0d17 50%, var(--dark) 100%);
+  }
+  .section-eyebrow {
+    font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--rose); margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700; line-height: 1.15;
+    margin-bottom: 1.2rem;
+  }
+  .section-sub {
+    font-size: 1rem; color: var(--text-body);
+    max-width: 520px; margin: 0 auto 3.5rem;
+    line-height: 1.7; font-weight: 300;
+  }
+  .clips-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem; max-width: 1100px; margin: 0 auto;
+  }
+  .clip-card {
+    position: relative; border-radius: 16px; overflow: hidden;
+    aspect-ratio: 9/16; cursor: pointer;
+    transition: transform 0.35s cubic-bezier(0.25,0.8,0.25,1);
+  }
+  .clip-card:hover { transform: scale(1.04) translateY(-4px); }
+  .clip-card:first-child { grid-row: span 2; aspect-ratio: auto; min-height: 400px; }
+  .clip-bg {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 3rem;
+  }
+  .clip-bg-1 { background: linear-gradient(145deg, #3d1526 0%, #c93055 100%); }
+  .clip-bg-2 { background: linear-gradient(145deg, #1a2a3a 0%, #4a8fc0 100%); }
+  .clip-bg-3 { background: linear-gradient(145deg, #1a3a2a 0%, #4ac09a 100%); }
+  .clip-bg-4 { background: linear-gradient(145deg, #3a2a1a 0%, #c0904a 100%); }
+  .clip-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
+  }
+  .clip-play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 52px; height: 52px;
+    background: rgba(255,255,255,0.18); backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(255,255,255,0.3); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .clip-card:hover .clip-play {
+    background: var(--rose); transform: translate(-50%,-50%) scale(1.1);
+    border-color: var(--rose);
+  }
+  .clip-play svg { margin-left: 3px; }
+  .clip-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 1rem; text-align: left;
+  }
+  .clip-tag {
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--blush); margin-bottom: 0.3rem;
+  }
+  .clip-title { font-size: 0.92rem; font-weight: 600; }
+
+  /* ─── BENEFITS ────────────────────────────── */
+  .benefits-section {
+    padding: 7rem 2.5rem;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .benefits-header { text-align: center; margin-bottom: 5rem; }
+  .benefits-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  .benefit-card {
+    padding: 2.2rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03);
+    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .benefit-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--rose), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .benefit-card:hover {
+    border-color: rgba(232,82,106,0.25);
+    background: rgba(232,82,106,0.05);
+    transform: translateY(-5px);
+  }
+  .benefit-card:hover::before { opacity: 1; }
+  .benefit-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: rgba(232,82,106,0.15); border: 1px solid rgba(232,82,106,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1.3rem;
+  }
+  .benefit-title {
+    font-size: 1.05rem; font-weight: 600; margin-bottom: 0.6rem;
+  }
+  .benefit-text {
+    font-size: 0.9rem; color: var(--text-body); line-height: 1.65; font-weight: 300;
+  }
+
+  /* ─── PROGRAM MODULES ─────────────────────── */
+  .modules-section {
+    padding: 7rem 2.5rem;
+    background: linear-gradient(180deg, var(--dark) 0%, #1c0e15 50%, var(--dark) 100%);
+  }
+  .modules-inner { max-width: 900px; margin: 0 auto; }
+  .modules-header { text-align: center; margin-bottom: 4rem; }
+  .module-item {
+    display: flex; align-items: flex-start; gap: 2rem;
+    padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: padding 0.3s;
+  }
+  .module-item:hover { padding-left: 1rem; }
+  .module-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
+    color: rgba(232,82,106,0.2); line-height: 1;
+    min-width: 60px;
+    transition: color 0.3s;
+  }
+  .module-item:hover .module-num { color: var(--rose); }
+  .module-content { flex: 1; }
+  .module-week {
+    font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--rose); margin-bottom: 0.4rem;
+  }
+  .module-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .module-desc { font-size: 0.9rem; color: var(--text-body); line-height: 1.6; font-weight: 300; }
+  .module-tags {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem;
+  }
+  .tag {
+    font-size: 0.7rem; letter-spacing: 0.08em;
+    background: rgba(244,164,164,0.1); border: 1px solid rgba(244,164,164,0.2);
+    color: var(--blush); padding: 0.25rem 0.7rem; border-radius: 100px;
+  }
+  .module-duration {
+    font-size: 0.8rem; color: var(--text-muted);
+    min-width: 60px; text-align: right; padding-top: 0.3rem;
+  }
+
+  /* ─── BRENDA SECTION ──────────────────────── */
+  .brenda-section {
+    padding: 7rem 2.5rem;
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .brenda-image-frame {
+    position: relative;
+  }
+  .brenda-img-placeholder {
+    width: 100%; aspect-ratio: 3/4;
+    border-radius: 24px;
+    background: linear-gradient(145deg, #2e1220 0%, #8b2a45 50%, #2e1220 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.8rem; font-size: 4rem; position: relative; overflow: hidden;
+  }
+  .brenda-img-placeholder::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(45deg, transparent 60%, rgba(212,175,106,0.1) 100%);
+  }
+  .brenda-frame-accent {
+    position: absolute; bottom: -20px; right: -20px;
+    width: 80%; height: 80%; border-radius: 24px;
+    border: 1.5px solid rgba(212,175,106,0.25); z-index: -1;
+  }
+  .brenda-ig-badge {
+    position: absolute; bottom: 1.5rem; left: 1.5rem;
+    background: rgba(26,10,15,0.85); backdrop-filter: blur(10px);
+    border: 1px solid rgba(244,164,164,0.2);
+    border-radius: 12px; padding: 0.7rem 1rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.82rem;
+  }
+  .ig-dot { width: 8px; height: 8px; background: var(--rose); border-radius: 50%; }
+  .brenda-text {}
+  .brenda-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-style: italic;
+    line-height: 1.45; color: var(--gold-light);
+    margin-bottom: 1.5rem;
+    position: relative; padding-left: 1.5rem;
+  }
+  .brenda-quote::before {
+    content: '"'; position: absolute; left: 0; top: -0.2rem;
+    font-size: 3rem; color: var(--rose); opacity: 0.5; line-height: 1;
+  }
+  .brenda-bio { font-size: 0.95rem; color: var(--text-body); line-height: 1.75; font-weight: 300; }
+  .brenda-socials { display: flex; gap: 1rem; margin-top: 2rem; }
+  .social-link {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1.2rem; border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff; text-decoration: none; font-size: 0.82rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .social-link:hover { border-color: var(--blush); background: rgba(244,164,164,0.08); }
+
+  /* ─── TESTIMONIALS ────────────────────────── */
+  .testimonials-section {
+    padding: 7rem 2.5rem;
+    background: linear-gradient(180deg, var(--dark) 0%, #1c0e15 100%);
+  }
+  .testimonials-header { text-align: center; margin-bottom: 4rem; }
+  .testimonials-track {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; max-width: 1100px; margin: 0 auto;
+  }
+  .testi-card {
+    padding: 2rem; border-radius: 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .testi-card:hover { border-color: rgba(232,82,106,0.2); transform: translateY(-4px); }
+  .testi-stars { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; letter-spacing: 2px; }
+  .testi-text { font-size: 0.93rem; color: var(--text-body); line-height: 1.7; font-weight: 300; margin-bottom: 1.5rem; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 0.8rem; }
+  .testi-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; color: #fff;
+  }
+  .av1 { background: linear-gradient(135deg, #e8526a, #c93055); }
+  .av2 { background: linear-gradient(135deg, #d4af6a, #a87c2a); }
+  .av3 { background: linear-gradient(135deg, #7b68ee, #553c9a); }
+  .av4 { background: linear-gradient(135deg, #48c9b0, #1a8a74); }
+  .av5 { background: linear-gradient(135deg, #f39c12, #d35400); }
+  .av6 { background: linear-gradient(135deg, #e74c3c, #922b21); }
+  .testi-name { font-size: 0.88rem; font-weight: 600; }
+  .testi-handle { font-size: 0.75rem; color: var(--text-muted); }
+
+  /* ─── PRICING ─────────────────────────────── */
+  .pricing-section {
+    padding: 8rem 2.5rem;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .pricing-glow {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(200,48,85,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .pricing-card {
+    max-width: 480px; margin: 3.5rem auto 0;
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(232,82,106,0.3);
+    border-radius: 28px; padding: 3rem;
+    position: relative; overflow: hidden;
+    box-shadow: 0 0 80px rgba(200,48,85,0.12);
+  }
+  .pricing-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--rose) 50%, transparent 100%);
+  }
+  .pricing-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--rose), var(--deep-rose));
+    color: #fff; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.35rem 1rem; border-radius: 100px; margin-bottom: 2rem;
+    font-weight: 600;
+  }
+  .pricing-name {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+    letter-spacing: 0.08em; margin-bottom: 0.5rem;
+  }
+  .pricing-price {
+    font-family: 'Bebas Neue', sans-serif; font-size: 5rem;
+    line-height: 1; color: var(--gold);
+    display: flex; align-items: flex-start; justify-content: center; gap: 0.2rem;
+  }
+  .price-currency { font-size: 2rem; margin-top: 0.5rem; }
+  .price-period { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--text-muted); align-self: flex-end; margin-bottom: 0.8rem; }
+  .price-original {
+    font-size: 0.9rem; color: var(--text-muted);
+    text-decoration: line-through; margin-bottom: 1.5rem;
+  }
+  .pricing-features {
+    list-style: none; margin: 2rem 0;
+    display: flex; flex-direction: column; gap: 0.9rem;
+    text-align: left;
+  }
+  .pricing-features li {
+    display: flex; align-items: center; gap: 0.8rem;
+    font-size: 0.92rem; color: var(--text-body);
+  }
+  .pricing-features li::before {
+    content: '✓'; width: 22px; height: 22px;
+    background: rgba(232,82,106,0.15); border: 1px solid rgba(232,82,106,0.3);
+    border-radius: 50%; color: var(--rose);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; flex-shrink: 0; font-weight: 700;
+  }
+  .guarantee {
+    margin-top: 2rem; padding: 1rem;
+    background: rgba(212,175,106,0.08); border-radius: 12px;
+    border: 1px solid rgba(212,175,106,0.15);
+    font-size: 0.82rem; color: var(--gold-light);
+  }
+
+  /* ─── FAQ ─────────────────────────────────── */
+  .faq-section {
+    padding: 6rem 2.5rem;
+    max-width: 720px; margin: 0 auto;
+  }
+  .faq-header { text-align: center; margin-bottom: 3.5rem; }
+  .faq-item {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+  .faq-question {
+    width: 100%; background: none; border: none; color: #fff;
+    padding: 1.4rem 0;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.97rem; font-weight: 500; cursor: pointer;
+    text-align: left; font-family: 'DM Sans', sans-serif;
+    transition: color 0.2s;
+  }
+  .faq-question:hover { color: var(--blush); }
+  .faq-icon {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.2s, transform 0.3s;
+    font-size: 1rem; color: var(--rose);
+  }
+  .faq-item.open .faq-icon {
+    background: rgba(232,82,106,0.15);
+    transform: rotate(45deg);
+  }
+  .faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+    font-size: 0.9rem; color: var(--text-body); line-height: 1.7; font-weight: 300;
+    padding-bottom: 0;
+  }
+  .faq-item.open .faq-answer {
+    max-height: 300px; padding-bottom: 1.4rem;
+  }
+
+  /* ─── FOOTER ──────────────────────────────── */
+  footer {
+    padding: 4rem 2.5rem 2.5rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
+    letter-spacing: 0.1em; color: #fff; margin-bottom: 0.5rem;
+  }
+  .footer-logo span { color: var(--rose); }
+  .footer-sub { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 2rem; }
+  .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+  .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--blush); }
+  .footer-bottom { margin-top: 2.5rem; font-size: 0.78rem; color: rgba(255,255,255,0.2); }
+
+  /* ─── ANIMATIONS ──────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1; transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* ─── RESPONSIVE ──────────────────────────── */
+  @media (max-width: 900px) {
+    .hero-content { padding: 8rem 1.5rem 4rem; }
+    .hero-image-side { opacity: 0.3; }
+    .clips-grid { grid-template-columns: 1fr 1fr; }
+    .clip-card:first-child { grid-column: span 2; aspect-ratio: 16/9; min-height: auto; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    .brenda-section { grid-template-columns: 1fr; gap: 3rem; }
+    .testimonials-track { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero-stats { gap: 1.5rem; }
+  }
+  @media (max-width: 600px) {
+    .clips-grid { grid-template-columns: 1fr; }
+    .clip-card:first-child { grid-column: span 1; aspect-ratio: 9/16; }
+    nav { padding: 1.25rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">CAKE<span>PUMP</span></a>
+  <ul class="nav-links">
+    <li><a href="#preview">El programa</a></li>
+    <li><a href="#brenda">Brenda</a></li>
+    <li><a href="#testimonios">Testimonios</a></li>
+    <li><a href="checkout.html" class="nav-cta">Comprar ahora →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 Acceso limitado disponible</div>
+    <h1>
+      CAKE<br>PUMP
+      <em>Workout</em>
+    </h1>
+    <p class="hero-sub">
+      El programa de ejercicio en casa más completo. Glúteos, piernas y cuerpo completo — con Brenda Jazmín. Sin gym, sin excusas.
+    </p>
+    <div class="hero-actions">
+      <a href="checkout.html" class="btn-primary">
+        Empieza hoy — $49 USD
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+      </a>
+      <a href="#preview" class="btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>
+        Ver preview
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">8+</div>
+        <div class="stat-label">Semanas de programa</div>
+      </div>
+      <div>
+        <div class="stat-num">40+</div>
+        <div class="stat-label">Videos exclusivos</div>
+      </div>
+      <div>
+        <div class="stat-num">12K+</div>
+        <div class="stat-label">Alumnas activas</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-image-side">
+    <div class="hero-img-placeholder">
+      <div style="font-size:5rem">🏋️‍♀️</div>
+      <div class="ig-handle">@brendaa_jazmin</div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO PREVIEW CLIPS -->
+<section class="preview-section" id="preview">
+  <p class="section-eyebrow reveal">Lo que vas a ver</p>
+  <h2 class="section-title reveal reveal-delay-1">Entrenamientos reales,<br><em style="color:var(--rose)">resultados reales</em></h2>
+  <p class="section-sub reveal reveal-delay-2">Mira un adelanto del contenido exclusivo que encontrarás dentro del programa. Todo diseñado para hacerse desde casa, sin equipo especial.</p>
+  <div class="clips-grid">
+    <div class="clip-card reveal">
+      <div class="clip-bg clip-bg-1" style="font-size:5rem">🍑</div>
+      <div class="clip-overlay"></div>
+      <div class="clip-play">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+      <div class="clip-info">
+        <div class="clip-tag">Semana 1 — Intro</div>
+        <div class="clip-title">Cake Pump Full Activation</div>
+      </div>
+    </div>
+    <div class="clip-card reveal reveal-delay-1">
+      <div class="clip-bg clip-bg-2" style="font-size:3.5rem">🔥</div>
+      <div class="clip-overlay"></div>
+      <div class="clip-play">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+      <div class="clip-info">
+        <div class="clip-tag">Cardio</div>
+        <div class="clip-title">Quema Express 20 min</div>
+      </div>
+    </div>
+    <div class="clip-card reveal reveal-delay-2">
+      <div class="clip-bg clip-bg-3" style="font-size:3.5rem">💪</div>
+      <div class="clip-overlay"></div>
+      <div class="clip-play">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+      <div class="clip-info">
+        <div class="clip-tag">Fuerza</div>
+        <div class="clip-title">Lower Body Pump</div>
+      </div>
+    </div>
+    <div class="clip-card reveal reveal-delay-3">
+      <div class="clip-bg clip-bg-4" style="font-size:3.5rem">✨</div>
+      <div class="clip-overlay"></div>
+      <div class="clip-play">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+      <div class="clip-info">
+        <div class="clip-tag">Recuperación</div>
+        <div class="clip-title">Stretching & Mobility</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits-section">
+  <div class="benefits-header">
+    <p class="section-eyebrow reveal">Por qué funciona</p>
+    <h2 class="section-title reveal reveal-delay-1">Todo lo que incluye<br>tu transformación</h2>
+  </div>
+  <div class="benefits-grid">
+    <div class="benefit-card reveal">
+      <div class="benefit-icon">🏠</div>
+      <h3 class="benefit-title">100% desde casa</h3>
+      <p class="benefit-text">Sin necesidad de gym ni equipo especial. Puedes entrenar en tu recámara, sala o cualquier espacio pequeño.</p>
+    </div>
+    <div class="benefit-card reveal reveal-delay-1">
+      <div class="benefit-icon">📱</div>
+      <h3 class="benefit-title">Acceso de por vida</h3>
+      <p class="benefit-text">Una vez que compras, el programa es tuyo para siempre. Accede desde cualquier dispositivo, cuando quieras.</p>
+    </div>
+    <div class="benefit-card reveal reveal-delay-2">
+      <div class="benefit-icon">🎯</div>
+      <h3 class="benefit-title">Programa estructurado</h3>
+      <p class="benefit-text">8 semanas de entrenamiento progresivo, diseñado específicamente para tonificar glúteos, piernas y cuerpo completo.</p>
+    </div>
+    <div class="benefit-card reveal reveal-delay-3">
+      <div class="benefit-icon">🥗</div>
+      <h3 class="benefit-title">Guía nutricional incluida</h3>
+      <p class="benefit-text">Plan de alimentación complementario para maximizar tus resultados y mantener energía durante los entrenamientos.</p>
+    </div>
+    <div class="benefit-card reveal reveal-delay-4">
+      <div class="benefit-icon">📊</div>
+      <h3 class="benefit-title">Seguimiento de progreso</h3>
+      <p class="benefit-text">Registra tus medidas y avances semana a semana. Visualiza tu transformación con las herramientas incluidas.</p>
+    </div>
+    <div class="benefit-card reveal reveal-delay-5">
+      <div class="benefit-icon">🤝</div>
+      <h3 class="benefit-title">Comunidad privada</h3>
+      <p class="benefit-text">Únete a miles de mujeres que ya están viviendo su transformación. Motivación, consejos y retos grupales.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM MODULES -->
+<section class="modules-section" id="programa">
+  <div class="modules-inner">
+    <div class="modules-header">
+      <p class="section-eyebrow reveal">El programa</p>
+      <h2 class="section-title reveal reveal-delay-1">8 semanas que van<br><em style="font-family:'Playfair Display',serif; color:var(--rose)">a cambiar tu cuerpo</em></h2>
+      <p class="section-sub reveal reveal-delay-2" style="margin-bottom:0">Cada semana aumenta la intensidad progresivamente para que tu cuerpo nunca se estanque.</p>
+    </div>
+    <div class="module-item reveal">
+      <div class="module-num">01</div>
+      <div class="module-content">
+        <div class="module-week">Semana 1–2</div>
+        <div class="module-title">Activación & Base</div>
+        <div class="module-desc">Aprende los movimientos fundamentales y activa los músculos correctos. Ideal para principiantes y para quienes llevan tiempo sin entrenar.</div>
+        <div class="module-tags"><span class="tag">Principiante</span><span class="tag">Activación</span><span class="tag">6 videos</span></div>
+      </div>
+      <div class="module-duration">~30 min/día</div>
+    </div>
+    <div class="module-item reveal">
+      <div class="module-num">02</div>
+      <div class="module-content">
+        <div class="module-week">Semana 3–4</div>
+        <div class="module-title">Pump & Quema</div>
+        <div class="module-desc">Combinación de fuerza y cardio para comenzar a ver resultados reales. Entrenamientos más dinámicos y desafiantes.</div>
+        <div class="module-tags"><span class="tag">Intermedio</span><span class="tag">Cardio+Fuerza</span><span class="tag">8 videos</span></div>
+      </div>
+      <div class="module-duration">~40 min/día</div>
+    </div>
+    <div class="module-item reveal">
+      <div class="module-num">03</div>
+      <div class="module-content">
+        <div class="module-week">Semana 5–6</div>
+        <div class="module-title">Definición Total</div>
+        <div class="module-desc">Rutinas de alta intensidad enfocadas en tonificar y definir. Tu cuerpo empieza a mostrar la transformación visible.</div>
+        <div class="module-tags"><span class="tag">Avanzado</span><span class="tag">HIIT</span><span class="tag">10 videos</span></div>
+      </div>
+      <div class="module-duration">~45 min/día</div>
+    </div>
+    <div class="module-item reveal">
+      <div class="module-num">04</div>
+      <div class="module-content">
+        <div class="module-week">Semana 7–8</div>
+        <div class="module-title">Cake Pump Máximo</div>
+        <div class="module-desc">El nivel final. Rutinas completas que integran todo lo aprendido para llevarte al máximo y sellar tu transformación.</div>
+        <div class="module-tags"><span class="tag">Pro</span><span class="tag">Full Body</span><span class="tag">12 videos</span></div>
+      </div>
+      <div class="module-duration">~50 min/día</div>
+    </div>
+    <div style="text-align:center; margin-top:3.5rem;" class="reveal">
+      <a href="checkout.html" class="btn-primary" style="font-size:1rem; padding:1.1rem 2.8rem">
+        Quiero acceso completo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BRENDA -->
+<section id="brenda">
+  <div class="brenda-section">
+    <div class="brenda-image-frame reveal">
+      <div class="brenda-img-placeholder">
+        <div>👸🏻</div>
+        <div style="font-size:1rem; color:rgba(255,255,255,0.5)">Brenda Jazmín</div>
+      </div>
+      <div class="brenda-frame-accent"></div>
+      <div class="brenda-ig-badge">
+        <div class="ig-dot"></div>
+        <span style="font-weight:600">@brendaa_jazmin</span>
+        <span style="color:var(--text-muted)">· Instagram</span>
+      </div>
+    </div>
+    <div class="brenda-text reveal reveal-delay-2">
+      <p class="section-eyebrow">Tu entrenadora</p>
+      <h2 class="section-title" style="text-align:left; margin-bottom:1.5rem">Hola, soy<br><em style="font-family:'Playfair Display',serif; color:var(--rose)">Brenda Jazmín</em></h2>
+      <blockquote class="brenda-quote">
+        "Creé este programa para que cualquier mujer pueda transformar su cuerpo desde casa, sin necesitar ir al gym."
+      </blockquote>
+      <p class="brenda-bio">
+        Influencer fitness con más de 500K seguidoras. Llevo 6 años entrenando y compartiendo mi proceso de forma honesta. Sé lo que funciona porque lo he vivido. Cake Pump Workout es el programa que yo hubiera querido tener cuando empecé.
+      </p>
+      <div class="brenda-socials">
+        <a href="https://www.instagram.com/brendaa_jazmin/" target="_blank" class="social-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          @brendaa_jazmin
+        </a>
+        <a href="checkout.html" class="btn-primary" style="font-size:0.85rem; padding:0.65rem 1.4rem">
+          Entrenar con ella →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section" id="testimonios">
+  <div class="testimonials-header">
+    <p class="section-eyebrow reveal">Resultados reales</p>
+    <h2 class="section-title reveal reveal-delay-1">Ellas ya lo vivieron</h2>
+    <p class="section-sub reveal reveal-delay-2">Más de 12,000 mujeres han transformado su cuerpo y su mentalidad con Cake Pump Workout.</p>
+  </div>
+  <div class="testimonials-track">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"En 4 semanas noté cambio real en mis glúteos. Nunca había sido constante con el ejercicio pero Brenda hace que sea divertido y adictivo. ¡Ya voy en la semana 6!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar av1">KM</div>
+        <div>
+          <div class="testi-name">Karla M.</div>
+          <div class="testi-handle">@karlafitlife · Monterrey</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Antes pagaba gym y no iba. Con este programa entreno en mi cuarto con mi bebé dormido al lado. Fácil, efectivo y muy bien explicado. 100% recomendado."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av2">SL</div>
+        <div>
+          <div class="testi-name">Sofía L.</div>
+          <div class="testi-handle">@sofi_activa · CDMX</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"La mejor inversión que he hecho para mi salud. Los videos son muy claros, la progresión se siente natural y los resultados hablan solos. ¡Gracias Brenda!"</p>
+      <div class="testi-author">
+        <div class="testi-avatar av3">VR</div>
+        <div>
+          <div class="testi-name">Valentina R.</div>
+          <div class="testi-handle">@vale.fit · Guadalajara</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Completé las 8 semanas y no puedo creer los resultados. Perdí 5 kg y gané músculo donde siempre quise. La guía nutricional también ayudó muchísimo."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av4">AM</div>
+        <div>
+          <div class="testi-name">Andrea M.</div>
+          <div class="testi-handle">@andreamfit · Tijuana</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Llevaba años intentando ser constante y nunca lo lograba. Brenda tiene algo especial que te motiva a no rendirte. Ya compré el acceso para mi hermana también."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av5">PG</div>
+        <div>
+          <div class="testi-name">Paulina G.</div>
+          <div class="testi-handle">@pau_wellness · Chihuahua</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-3">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"No tenía idea que podía lograrse tanto sin gym. Las rutinas son intensas pero Brenda siempre muestra modificaciones. Perfectas para cualquier nivel."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av6">IR</div>
+        <div>
+          <div class="testi-name">Isabela R.</div>
+          <div class="testi-handle">@isa.transform · Hermosillo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="precios">
+  <div class="pricing-glow"></div>
+  <p class="section-eyebrow reveal">Inversión única</p>
+  <h2 class="section-title reveal reveal-delay-1">Comienza tu transformación<br><em style="font-family:'Playfair Display',serif; color:var(--rose)">hoy mismo</em></h2>
+  <div class="pricing-card reveal">
+    <div class="pricing-badge">🔥 Oferta de lanzamiento</div>
+    <div class="pricing-name">CAKE PUMP WORKOUT</div>
+    <div class="pricing-price">
+      <span class="price-currency">$</span>
+      49
+      <span class="price-period">USD</span>
+    </div>
+    <div class="price-original">Precio regular: $97 USD</div>
+    <ul class="pricing-features">
+      <li>40+ videos de entrenamiento HD</li>
+      <li>8 semanas de programa estructurado</li>
+      <li>Guía nutricional completa</li>
+      <li>Acceso de por vida (sin mensualidad)</li>
+      <li>Comunidad privada de alumnas</li>
+      <li>Material de seguimiento descargable</li>
+      <li>Actualizaciones futuras incluidas</li>
+    </ul>
+    <a href="checkout.html" class="btn-primary" style="width:100%; justify-content:center; font-size:1.05rem; padding:1.15rem;">
+      Comprar acceso — $49 USD
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+    </a>
+    <div class="guarantee">
+      🛡️ Garantía de 7 días — Si no estás satisfecha, te devolvemos tu dinero, sin preguntas.
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-header">
+    <p class="section-eyebrow reveal">Dudas frecuentes</p>
+    <h2 class="section-title reveal reveal-delay-1">Preguntas frecuentes</h2>
+  </div>
+  <div class="faq-item reveal">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      ¿Necesito equipo especial para hacer el programa?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer">No necesitas ningún equipo. Todo el programa está diseñado para hacerse con tu propio peso corporal, desde la comodidad de tu hogar. En algunos videos opcionales se sugiere una liga de resistencia, pero no es obligatorio.</div>
+  </div>
+  <div class="faq-item reveal">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      ¿El programa funciona si soy principiante?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer">¡Absolutamente! El programa empieza desde lo básico en las primeras semanas y va aumentando gradualmente la intensidad. Brenda muestra variaciones para todos los niveles en cada ejercicio.</div>
+  </div>
+  <div class="faq-item reveal">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      ¿Cuánto tiempo al día requiere el programa?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer">Los entrenamientos van de 30 a 50 minutos dependiendo de la semana. Se recomiendan 4–5 días de entrenamiento por semana, con días de descanso y recuperación incluidos en el plan.</div>
+  </div>
+  <div class="faq-item reveal">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      ¿Puedo acceder desde mi celular?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer">Sí, el programa está optimizado para cualquier dispositivo — celular, tablet, laptop o smart TV. Los videos se reproducen en pantalla completa tanto en vertical como horizontal.</div>
+  </div>
+  <div class="faq-item reveal">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      ¿Por cuánto tiempo tengo acceso?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer">El acceso es de por vida. Una vez que compras, el programa es tuyo para siempre. Puedes repetirlo las veces que quieras y siempre tendrás acceso a las actualizaciones futuras sin costo adicional.</div>
+  </div>
+  <div class="faq-item reveal">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      ¿Qué pasa si no me gustan los resultados?
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer">Ofrecemos garantía de devolución de 7 días sin preguntas. Si por cualquier razón no estás satisfecha con el programa en los primeros 7 días, te devolvemos el 100% de tu inversión.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CAKE<span>PUMP</span> WORKOUT</div>
+  <div class="footer-sub">by Brenda Jazmín · @brendaa_jazmin</div>
+  <div class="footer-links">
+    <a href="#">Inicio</a>
+    <a href="#programa">Programa</a>
+    <a href="#brenda">Sobre Brenda</a>
+    <a href="#testimonios">Testimonios</a>
+    <a href="checkout.html">Comprar</a>
+    <a href="#">Privacidad</a>
+    <a href="#">Términos</a>
+  </div>
+  <div class="footer-bottom">© 2024 Cake Pump Workout — Todos los derechos reservados.</div>
+</footer>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  }, 80);
+});
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '20px'; cursor.style.height = '20px';
+    ring.style.width = '52px'; ring.style.height = '52px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '12px'; cursor.style.height = '12px';
+    ring.style.width = '36px'; ring.style.height = '36px';
+  });
+});
+
+// Nav scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// FAQ
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>

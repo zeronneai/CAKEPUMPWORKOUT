@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Programa — Cake Pump Workout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #E8526A; --deep-rose: #C93055; --blush: #F4A4A4;
+    --gold: #D4AF6A; --gold-light: #F0D49A;
+    --dark: #0F0509; --dark-mid: #1A0A0F;
+    --sidebar-bg: #130810;
+    --text-muted: rgba(255,255,255,0.45);
+    --text-body: rgba(255,255,255,0.82);
+    --surface: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.07);
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark); color: #fff;
+    display: flex; flex-direction: column; overflow-x: hidden;
+  }
+
+  /* ── TOP NAV ── */
+  .top-nav {
+    height: 56px; background: var(--dark-mid);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.5rem; flex-shrink: 0; position: sticky; top:0; z-index:100;
+  }
+  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.25rem; letter-spacing:0.1em; color:#fff; }
+  .nav-logo span { color:var(--rose); }
+  .nav-right { display:flex; align-items:center; gap:1rem; }
+  .progress-wrap { display:flex; align-items:center; gap:0.6rem; font-size:0.78rem; color:var(--text-muted); }
+  .progress-bar { width:100px; height:4px; background:rgba(255,255,255,0.1); border-radius:100px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--rose),var(--gold)); width:12%; border-radius:100px; }
+  .user-avatar {
+    width:32px; height:32px; border-radius:50%;
+    background:linear-gradient(135deg,var(--rose),var(--deep-rose));
+    display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700;
+    cursor:pointer;
+  }
+
+  /* ── LAYOUT ── */
+  .app-layout {
+    flex:1; display:grid; grid-template-columns: 340px 1fr;
+    min-height: 0;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    overflow-y: auto; display:flex; flex-direction:column;
+  }
+  .sidebar::-webkit-scrollbar { width:4px; }
+  .sidebar::-webkit-scrollbar-track { background:transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:100px; }
+  .sidebar-header { padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); }
+  .sidebar-program-name { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.08em; }
+  .sidebar-program-sub { font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem; }
+
+  .week-group {}
+  .week-label {
+    padding: 0.8rem 1.5rem 0.5rem;
+    font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--rose); font-weight:600;
+    position:sticky; top:0; background:var(--sidebar-bg); z-index:1;
+    border-bottom:1px solid var(--border);
+  }
+  .episode-item {
+    display:flex; align-items:center; gap:0.9rem;
+    padding:0.9rem 1.5rem; cursor:pointer;
+    transition:background 0.2s; border-bottom:1px solid var(--border);
+    position:relative;
+  }
+  .episode-item:hover { background:rgba(255,255,255,0.03); }
+  .episode-item.active { background:rgba(232,82,106,0.08); }
+  .episode-item.active::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:var(--rose);
+  }
+  .ep-thumb {
+    width:52px; height:52px; border-radius:8px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem; position:relative; overflow:hidden;
+  }
+  .ep-thumb-1 { background:linear-gradient(135deg,#3d1526,#c93055); }
+  .ep-thumb-2 { background:linear-gradient(135deg,#1a2a3a,#4a8fc0); }
+  .ep-thumb-3 { background:linear-gradient(135deg,#2a1a3a,#8c4fc0); }
+  .ep-thumb-4 { background:linear-gradient(135deg,#1a3a2a,#4ac09a); }
+  .ep-thumb-5 { background:linear-gradient(135deg,#3a2a1a,#c0904a); }
+  .ep-thumb-6 { background:linear-gradient(135deg,#1a1a3a,#5050c0); }
+  .ep-done .ep-thumb::after {
+    content:'✓'; position:absolute; inset:0; background:rgba(0,0,0,0.55);
+    display:flex; align-items:center; justify-content:center;
+    color:#4ade80; font-size:1.1rem; font-weight:700;
+  }
+  .ep-info { flex:1; min-width:0; }
+  .ep-num { font-size:0.65rem; color:var(--text-muted); letter-spacing:0.1em; margin-bottom:0.15rem; }
+  .ep-title { font-size:0.88rem; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ep-meta { font-size:0.72rem; color:var(--text-muted); margin-top:0.15rem; }
+  .ep-lock { color:rgba(255,255,255,0.2); flex-shrink:0; }
+
+  /* ── MAIN ── */
+  .main-content { overflow-y:auto; display:flex; flex-direction:column; }
+  .main-content::-webkit-scrollbar { width:4px; }
+  .main-content::-webkit-scrollbar-track { background:transparent; }
+  .main-content::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:100px; }
+
+  /* ── VIDEO PLAYER ── */
+  .video-wrapper {
+    position:relative; background:#000;
+    aspect-ratio:16/9; width:100%;
+  }
+  .video-placeholder {
+    position:absolute; inset:0;
+    background:linear-gradient(135deg,#200a15 0%,#5c1530 50%,#200a15 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem;
+  }
+  .video-title-overlay {
+    position:absolute; bottom:0; left:0; right:0; padding:1.5rem 2rem;
+    background:linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+    display:flex; justify-content:space-between; align-items:flex-end;
+  }
+  .video-ep-label { font-size:0.72rem; color:rgba(255,255,255,0.7); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.3rem; }
+  .video-ep-title { font-size:1.1rem; font-weight:600; }
+  .video-controls-bar {
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    padding:0.5rem 1.2rem 0.7rem;
+  }
+  .progress-timeline {
+    width:100%; height:3px; background:rgba(255,255,255,0.2);
+    border-radius:100px; cursor:pointer; margin-bottom:0.6rem;
+    position:relative;
+  }
+  .progress-played { height:100%; background:var(--rose); border-radius:100px; width:35%; position:relative; }
+  .progress-played::after { content:''; position:absolute; right:-5px; top:-4px; width:11px; height:11px; background:#fff; border-radius:50%; }
+  .controls-row { display:flex; align-items:center; justify-content:space-between; }
+  .controls-left, .controls-right { display:flex; align-items:center; gap:0.8rem; }
+  .ctrl-btn {
+    background:none; border:none; color:rgba(255,255,255,0.85); cursor:pointer;
+    padding:0.3rem; border-radius:6px; display:flex; align-items:center;
+    transition:color 0.2s, background 0.2s; font-size:0.82rem;
+  }
+  .ctrl-btn:hover { color:#fff; background:rgba(255,255,255,0.1); }
+  .play-btn {
+    width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,0.15); border:none; color:#fff; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background 0.2s;
+  }
+  .play-btn:hover { background:var(--rose); }
+  .time-display { font-size:0.78rem; color:rgba(255,255,255,0.7); }
+  .fullscreen-btn {
+    background:none; border:none; color:rgba(255,255,255,0.85); cursor:pointer;
+    padding:0.3rem; display:flex; align-items:center; gap:0.4rem; font-size:0.78rem;
+    border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:0.3rem 0.7rem;
+    transition:background 0.2s, border-color 0.2s;
+  }
+  .fullscreen-btn:hover { background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.3); }
+
+  /* ── VIDEO INFO ── */
+  .video-info { padding:2rem 2.5rem; flex:1; }
+  .video-info-header { display:flex; justify-content:space-between; align-items:flex-start; gap:2rem; margin-bottom:1.5rem; }
+  .video-main-title { font-size:1.5rem; font-weight:600; line-height:1.3; }
+  .video-meta-row { display:flex; align-items:center; gap:1.5rem; margin-top:0.5rem; flex-wrap:wrap; }
+  .meta-item { font-size:0.8rem; color:var(--text-muted); display:flex; align-items:center; gap:0.3rem; }
+  .meta-item svg { opacity:0.6; }
+  .mark-done-btn {
+    flex-shrink:0; background:rgba(74,222,128,0.1); border:1px solid rgba(74,222,128,0.25);
+    color:#4ade80; padding:0.55rem 1.2rem; border-radius:100px; font-size:0.82rem;
+    cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:500;
+    transition:background 0.2s; display:flex; align-items:center; gap:0.4rem;
+    white-space:nowrap;
+  }
+  .mark-done-btn:hover { background:rgba(74,222,128,0.18); }
+  .video-desc-section { margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border); }
+  .desc-label { font-size:0.72rem; letter-spacing:0.13em; text-transform:uppercase; color:var(--rose); margin-bottom:0.8rem; }
+  .video-description { font-size:0.93rem; color:var(--text-body); line-height:1.75; font-weight:300; }
+  .materials-section { margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border); }
+  .materials-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:1rem; }
+  .material-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; padding:1rem;
+    display:flex; align-items:center; gap:0.8rem;
+    cursor:pointer; transition:border-color 0.2s, background 0.2s;
+  }
+  .material-card:hover { border-color:rgba(232,82,106,0.25); background:rgba(232,82,106,0.04); }
+  .material-icon { font-size:1.5rem; }
+  .material-title { font-size:0.82rem; font-weight:500; }
+  .material-sub { font-size:0.72rem; color:var(--text-muted); margin-top:0.1rem; }
+  .next-episode-section { margin-top:2rem; padding:1.5rem 2rem; background:var(--surface); border-radius:16px; border:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .next-thumb { width:64px; height:64px; border-radius:10px; background:linear-gradient(135deg,#1a2a3a,#4a8fc0); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+  .next-info { flex:1; padding:0 1rem; }
+  .next-label { font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.2rem; }
+  .next-title { font-size:0.95rem; font-weight:600; }
+  .next-btn {
+    background:linear-gradient(135deg,var(--rose),var(--deep-rose));
+    color:#fff; padding:0.6rem 1.3rem; border-radius:100px;
+    border:none; cursor:pointer; font-size:0.82rem; font-weight:600;
+    font-family:'DM Sans',sans-serif; white-space:nowrap;
+    transition:transform 0.2s; display:flex; align-items:center; gap:0.4rem;
+  }
+  .next-btn:hover { transform:translateY(-1px); }
+
+  /* ── FULLSCREEN MODAL ── */
+  .fs-modal {
+    display:none; position:fixed; inset:0; background:#000; z-index:1000;
+    flex-direction:column;
+  }
+  .fs-modal.open { display:flex; }
+  .fs-video-area { flex:1; position:relative; display:flex; align-items:center; justify-content:center; }
+  .fs-placeholder {
+    width:100%; height:100%;
+    background:linear-gradient(135deg,#200a15,#5c1530,#200a15);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem;
+  }
+  .fs-controls {
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    padding:1rem 2rem 1.5rem;
+  }
+  .fs-progress { width:100%; height:4px; background:rgba(255,255,255,0.2); border-radius:100px; margin-bottom:1rem; cursor:pointer; }
+  .fs-progress-fill { height:100%; background:var(--rose); border-radius:100px; width:35%; position:relative; }
+  .fs-progress-fill::after { content:''; position:absolute; right:-7px; top:-5px; width:14px; height:14px; background:#fff; border-radius:50%; }
+  .fs-row { display:flex; align-items:center; justify-content:space-between; }
+  .fs-left, .fs-right { display:flex; align-items:center; gap:1rem; }
+  .fs-close {
+    position:absolute; top:1.2rem; right:1.5rem;
+    background:rgba(255,255,255,0.12); border:none; color:#fff;
+    width:40px; height:40px; border-radius:50%; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+    transition:background 0.2s;
+  }
+  .fs-close:hover { background:var(--rose); }
+  .orient-toggle {
+    display:flex; background:rgba(255,255,255,0.08); border-radius:100px; padding:3px; gap:2px;
+  }
+  .orient-btn {
+    background:none; border:none; color:rgba(255,255,255,0.6); cursor:pointer;
+    padding:0.3rem 0.8rem; border-radius:100px; font-size:0.75rem; font-family:'DM Sans',sans-serif;
+    transition:background 0.2s, color 0.2s;
+  }
+  .orient-btn.active { background:rgba(255,255,255,0.15); color:#fff; }
+
+  @media(max-width:800px) {
+    .app-layout { grid-template-columns:1fr; }
+    .sidebar { display:none; }
+    .materials-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-logo">CAKE<span>PUMP</span></div>
+  <div class="nav-right">
+    <div class="progress-wrap">
+      <span>Progreso</span>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <span>1/8</span>
+    </div>
+    <div class="user-avatar">YO</div>
+  </div>
+</nav>
+
+<!-- FULLSCREEN MODAL -->
+<div class="fs-modal" id="fsModal">
+  <div class="fs-video-area">
+    <div class="fs-placeholder">
+      <div style="font-size:5rem">🍑</div>
+      <div style="font-size:1.1rem; font-weight:600; opacity:0.9;" id="fs-title">Cake Pump Full Activation</div>
+      <div style="font-size:0.85rem; color:rgba(255,255,255,0.5);">@brendaa_jazmin</div>
+    </div>
+    <button class="fs-close" onclick="closeFs()">✕</button>
+    <div class="fs-controls">
+      <div class="fs-progress"><div class="fs-progress-fill"></div></div>
+      <div class="fs-row">
+        <div class="fs-left">
+          <button class="play-btn" style="background:rgba(255,255,255,0.15)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+          </button>
+          <span style="font-size:0.82rem; color:rgba(255,255,255,0.65);">12:32 / 35:00</span>
+          <div class="orient-toggle">
+            <button class="orient-btn active" onclick="setOrient('h',this)">⬛ Horizontal</button>
+            <button class="orient-btn" onclick="setOrient('v',this)">▮ Vertical</button>
+          </div>
+        </div>
+        <div class="fs-right">
+          <button class="ctrl-btn" style="font-size:0.8rem; border:1px solid rgba(255,255,255,0.15); padding:0.3rem 0.7rem; border-radius:6px;" onclick="closeFs()">
+            Salir pantalla completa
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-program-name">Cake Pump Workout</div>
+      <div class="sidebar-program-sub">8 semanas · 40 videos</div>
+    </div>
+
+    <div class="week-group">
+      <div class="week-label">📍 Semana 1 — Activación & Base</div>
+      <div class="episode-item ep-done" onclick="selectEp(this,'Bienvenida al programa','EP1 · 5 min','🎉','ep-thumb-1')">
+        <div class="ep-thumb ep-thumb-1">🎉</div>
+        <div class="ep-info">
+          <div class="ep-num">EP 01</div>
+          <div class="ep-title">Bienvenida al programa</div>
+          <div class="ep-meta">5 min · Intro</div>
+        </div>
+      </div>
+      <div class="episode-item active" onclick="selectEp(this,'Cake Pump Full Activation','EP2 · 32 min','🍑','ep-thumb-1')">
+        <div class="ep-thumb ep-thumb-1">🍑</div>
+        <div class="ep-info">
+          <div class="ep-num">EP 02</div>
+          <div class="ep-title">Cake Pump Full Activation</div>
+          <div class="ep-meta">32 min · Glúteos y piernas</div>
+        </div>
+      </div>
+      <div class="episode-item" onclick="selectEp(this,'Core & Postura Base','EP3 · 28 min','💪','ep-thumb-2')">
+        <div class="ep-thumb ep-thumb-2">💪</div>
+        <div class="ep-info">
+          <div class="ep-num">EP 03</div>
+          <div class="ep-title">Core & Postura Base</div>
+          <div class="ep-meta">28 min · Core y espalda</div>
+        </div>
+      </div>
+      <div class="episode-item" onclick="selectEp(this,'Stretching & Recuperación','EP4 · 20 min','✨','ep-thumb-4')">
+        <div class="ep-thumb ep-thumb-4">✨</div>
+        <div class="ep-info">
+          <div class="ep-num">EP 04</div>
+          <div class="ep-title">Stretching & Recuperación</div>
+          <div class="ep-meta">20 min · Recuperación</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-group">
+      <div class="week-label">🔒 Semana 2 — Pump & Quema</div>
+      <div class="episode-item" onclick="selectEp(this,'Quema Express 20 min','EP5 · 22 min','🔥','ep-thumb-5')">
+        <div class="ep-thumb ep-thumb-5">🔥</div>
+        <div class="ep-info">
+          <div class="ep-num">EP 05</div>
+          <div class="ep-title">Quema Express 20 min</div>
+          <div class="ep-meta">22 min · Cardio + Fuerza</div>
+        </div>
+      </div>
+      <div class="episode-item" onclick="selectEp(this,'Lower Body Pump','EP6 · 38 min','🦵','ep-thumb-1')">
+        <div class="ep-thumb ep-thumb-1">🦵</div>
+        <div class="ep-info">
+          <div class="ep-num">EP 06</div>
+          <div class="ep-title">Lower Body Pump</div>
+          <div class="ep-meta">38 min · Piernas intensas</div>
+        </div>
+      </div>
+      <div class="episode-item" onclick="selectEp(this,'Full Body Circuit','EP7 · 40 min','⚡','ep-thumb-3')">
+        <div class="ep-thumb ep-thumb-3">⚡</div>
+        <div class="ep-info">
+          <div class="ep-num">EP 07</div>
+          <div class="ep-title">Full Body Circuit</div>
+          <div class="ep-meta">40 min · Cuerpo completo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-group">
+      <div class="week-label">🔒 Semanas 3–8 — Próximamente</div>
+      <div class="episode-item" style="opacity:0.4; pointer-events:none;">
+        <div class="ep-thumb ep-thumb-6">🔒</div>
+        <div class="ep-info">
+          <div class="ep-num">EP 08–40</div>
+          <div class="ep-title">Completando semana anterior...</div>
+          <div class="ep-meta">Se desbloquean al avanzar</div>
+        </div>
+        <div class="ep-lock">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN VIDEO AREA -->
+  <main class="main-content">
+    <!-- VIDEO PLAYER -->
+    <div class="video-wrapper">
+      <div class="video-placeholder">
+        <div style="font-size:5rem" id="current-icon">🍑</div>
+      </div>
+      <div class="video-controls-bar">
+        <div class="progress-timeline"><div class="progress-played"></div></div>
+        <div class="controls-row">
+          <div class="controls-left">
+            <button class="play-btn" id="playBtn" onclick="togglePlay(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+            </button>
+            <button class="ctrl-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19,20 9,12 19,4"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+            </button>
+            <button class="ctrl-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+            </button>
+            <span class="time-display" id="timeDisplay">12:32 / 35:00</span>
+            <button class="ctrl-btn" style="font-size:0.75rem; font-weight:600;">1x</button>
+          </div>
+          <div class="controls-right">
+            <button class="ctrl-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </button>
+            <button class="fullscreen-btn" onclick="openFs()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              Pantalla completa
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIDEO INFO -->
+    <div class="video-info">
+      <div class="video-info-header">
+        <div>
+          <div style="font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--rose); margin-bottom:0.4rem;" id="current-ep-label">EP 02 · Semana 1 — Activación & Base</div>
+          <div class="video-main-title" id="current-title">Cake Pump Full Activation</div>
+          <div class="video-meta-row">
+            <span class="meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+              32 minutos
+            </span>
+            <span class="meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              Glúteos y piernas
+            </span>
+            <span class="meta-item">Nivel: Principiante-Intermedio</span>
+          </div>
+        </div>
+        <button class="mark-done-btn" id="doneBtn" onclick="markDone()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+          Marcar como visto
+        </button>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="video-desc-section">
+        <div class="desc-label">Descripción del video</div>
+        <div class="video-description">
+          En este entrenamiento vamos a activar completamente los glúteos y las piernas con una secuencia diseñada para aumentar la conexión mente-músculo. Es el video más importante de la primera semana porque sienta las bases de todo lo que viene después.<br><br>
+          Vamos a hacer 4 rondas de ejercicios compuestos: hip thrusts, sentadillas sumo, patadas de glúteo en cuadrupedia y puentes de glúteo con pausa. Cada ejercicio tiene su variación de menor dificultad mostrada al lado. Descansa 45 segundos entre ejercicios y 90 segundos entre rondas.
+        </div>
+      </div>
+
+      <!-- MATERIALS -->
+      <div class="materials-section">
+        <div class="desc-label">Material recomendado</div>
+        <div class="materials-grid">
+          <div class="material-card">
+            <div class="material-icon">📄</div>
+            <div>
+              <div class="material-title">Tabla de ejercicios</div>
+              <div class="material-sub">PDF · Semana 1</div>
+            </div>
+          </div>
+          <div class="material-card">
+            <div class="material-icon">🍽️</div>
+            <div>
+              <div class="material-title">Guía nutricional</div>
+              <div class="material-sub">PDF · Plan completo</div>
+            </div>
+          </div>
+          <div class="material-card">
+            <div class="material-icon">📊</div>
+            <div>
+              <div class="material-title">Tracker de progreso</div>
+              <div class="material-sub">Excel · Semana 1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEXT EPISODE -->
+      <div class="next-episode-section" style="margin-bottom:3rem;">
+        <div class="next-thumb">💪</div>
+        <div class="next-info">
+          <div class="next-label">Siguiente episodio</div>
+          <div class="next-title">EP 03 — Core & Postura Base</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem;">28 min · Core y espalda</div>
+        </div>
+        <button class="next-btn" onclick="selectEp(null,'Core & Postura Base','EP3 · 28 min','💪','ep-thumb-2')">
+          Siguiente
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+let playing = false;
+
+function togglePlay(btn) {
+  playing = !playing;
+  btn.innerHTML = playing
+    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
+    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>';
+}
+
+function selectEp(el, title, epLabel, icon, thumbClass) {
+  document.querySelectorAll('.episode-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('current-title').textContent = title;
+  document.getElementById('current-ep-label').textContent = epLabel + ' · Semana 1';
+  document.getElementById('current-icon').textContent = icon;
+  document.getElementById('fs-title').textContent = title;
+  document.getElementById('doneBtn').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg> Marcar como visto';
+  document.getElementById('doneBtn').style.color = '#4ade80';
+  window.scrollTo({top:0, behavior:'smooth'});
+  const mc = document.querySelector('.main-content');
+  if(mc) mc.scrollTo({top:0, behavior:'smooth'});
+}
+
+function markDone() {
+  const btn = document.getElementById('doneBtn');
+  btn.innerHTML = '✓ ¡Completado!';
+  btn.style.background = 'rgba(74,222,128,0.2)';
+  btn.style.borderColor = 'rgba(74,222,128,0.4)';
+}
+
+function openFs() {
+  document.getElementById('fsModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFs() {
+  document.getElementById('fsModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function setOrient(dir, btn) {
+  document.querySelectorAll('.orient-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const area = document.querySelector('.fs-video-area');
+  if (dir === 'v') {
+    area.style.maxWidth = '420px';
+    area.style.margin = '0 auto';
+  } else {
+    area.style.maxWidth = '';
+    area.style.margin = '';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeFs();
+});
+</script>
+</body>
+</html>
