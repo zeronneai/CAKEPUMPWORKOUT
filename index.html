@@ -798,10 +798,9 @@
 
   /* ─── MODAL ──────────────────────────────── */
   #modal-registro {
-    display: none; position: fixed; inset: 0; z-index: 10000;
+    position: fixed; inset: 0; z-index: 10000;
     align-items: center; justify-content: center; padding: 1.5rem;
   }
-  #modal-registro.open { display: flex; }
   .modal-overlay {
     position: absolute; inset: 0;
     background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
@@ -901,7 +900,7 @@
   <div class="floating-cta-inner">
     <span class="float-label">Cake Pump Workout</span>
     <span class="float-price">Gratis</span>
-    <a href="#registro" class="btn-primary" style="font-size:0.85rem; padding:0.65rem 1.4rem; border-radius:100px;">
+    <a href="#" onclick="openModal();return false;" class="btn-primary" style="font-size:0.85rem; padding:0.65rem 1.4rem; border-radius:100px;">
       Empieza ahora →
     </a>
   </div>
@@ -914,7 +913,7 @@
     <li><a href="#preview">El programa</a></li>
     <li><a href="#brenda">Brenda</a></li>
     <li><a href="#testimonios">Testimonios</a></li>
-    <li><a href="#registro" class="nav-cta">Comprar ahora →</a></li>
+    <li><a href="#" onclick="openModal();return false;" class="nav-cta">Comprar ahora →</a></li>
   </ul>
 </nav>
 
@@ -932,7 +931,7 @@
       El programa de ejercicio en casa más completo. Glúteos, piernas y cuerpo completo — con Brenda Jazmín. Sin gym, sin excusas.
     </p>
     <div class="hero-actions">
-      <a href="#registro" class="btn-primary">
+      <a href="#" onclick="openModal();return false;" class="btn-primary">
         Empieza hoy — Gratis
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
       </a>
@@ -1121,7 +1120,7 @@
       <div class="module-duration">~50 min/día</div>
     </div>
     <div style="text-align:center; margin-top:3.5rem;" class="reveal">
-      <a href="#registro" class="btn-primary" style="font-size:1rem; padding:1.1rem 2.8rem">
+      <a href="#" onclick="openModal();return false;" class="btn-primary" style="font-size:1rem; padding:1.1rem 2.8rem">
         Quiero acceso completo
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
       </a>
@@ -1157,7 +1156,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           @brendaa_jazmin
         </a>
-        <a href="#registro" class="btn-primary" style="font-size:0.85rem; padding:0.65rem 1.4rem">
+        <a href="#" onclick="openModal();return false;" class="btn-primary" style="font-size:0.85rem; padding:0.65rem 1.4rem">
           Entrenar con ella →
         </a>
       </div>
@@ -1265,8 +1264,8 @@
       <li>Material de seguimiento descargable</li>
       <li>Actualizaciones futuras incluidas</li>
     </ul>
-    <a href="#registro" class="btn-primary" style="width:100%; justify-content:center; font-size:1.05rem; padding:1.15rem;">
-      Comprar acceso — Gratis
+    <a href="#" onclick="openModal();return false;" class="btn-primary" style="width:100%; justify-content:center; font-size:1.05rem; padding:1.15rem;">
+      Obtener acceso gratis
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
     </a>
     <div class="guarantee">
@@ -1401,7 +1400,7 @@
     <a href="#programa">Programa</a>
     <a href="#brenda">Sobre Brenda</a>
     <a href="#testimonios">Testimonios</a>
-    <a href="#registro">Comprar</a>
+    <a href="#" onclick="openModal();return false;">Registro</a>
     <a href="#">Privacidad</a>
     <a href="#">Términos</a>
   </div>
@@ -1524,37 +1523,28 @@ function toggleFaq(btn) {
 }
 
 // ─── MODAL ───────────────────────────────────────────
-const modal = document.getElementById('modal-registro');
-
 function openModal() {
-  modal.classList.add('open');
+  const m = document.getElementById('modal-registro');
+  m.style.display = 'flex';
   document.body.style.overflow = 'hidden';
+  // Reset state each time modal opens
+  document.getElementById('modalFormWrap').style.display = 'block';
+  document.getElementById('modalSuccess').style.display = 'none';
+  document.getElementById('modalError').style.display = 'none';
+  const btn = document.getElementById('modalSubmitBtn');
+  btn.disabled = false;
+  btn.textContent = 'Quiero mi acceso gratis →';
 }
+
 function closeModal() {
-  modal.classList.remove('open');
+  document.getElementById('modal-registro').style.display = 'none';
   document.body.style.overflow = '';
 }
 
-// Open on any CTA click (btn-primary, nav-cta, floating CTA)
-document.querySelectorAll('.btn-primary, .nav-cta, .floating-cta .btn-primary').forEach(el => {
-  el.addEventListener('click', function(e) {
-    const href = this.getAttribute('href');
-    // Intercept links that go to #registro or checkout.html
-    if (!href || href === '#registro' || href.includes('checkout')) {
-      e.preventDefault();
-      openModal();
-    }
-  });
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
 });
 
-// Close on overlay or X button
-document.getElementById('modalOverlay').addEventListener('click', closeModal);
-document.getElementById('modalClose').addEventListener('click', closeModal);
-
-// Close on Escape key
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-// Form submit
 document.getElementById('modalForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const btn = document.getElementById('modalSubmitBtn');
@@ -1564,18 +1554,16 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
   btn.disabled = true;
   btn.textContent = 'Enviando...';
 
-  const body = {
-    name: document.getElementById('m-name').value.trim(),
-    phone: document.getElementById('m-phone').value.trim(),
-    email: document.getElementById('m-email').value.trim(),
-    goal: document.getElementById('m-goal').value,
-  };
-
   try {
     const res = await fetch('/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        name:  document.getElementById('m-name').value.trim(),
+        phone: document.getElementById('m-phone').value.trim(),
+        email: document.getElementById('m-email').value.trim(),
+        goal:  document.getElementById('m-goal').value,
+      }),
     });
     if (!res.ok) throw new Error();
     const data = await res.json();
@@ -1594,10 +1582,10 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
 </script>
 
 <!-- MODAL REGISTRO -->
-<div id="modal-registro" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-  <div class="modal-overlay" id="modalOverlay"></div>
+<div id="modal-registro" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display:none; position:fixed; inset:0; z-index:10000; align-items:center; justify-content:center; padding:1.5rem;">
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
   <div class="modal-box">
-    <button class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
+    <button class="modal-close" id="modalClose" aria-label="Cerrar" onclick="closeModal()">✕</button>
     <div id="modalFormWrap">
       <div class="modal-title" id="modal-title">Desbloquea tu acceso gratis</div>
       <div class="modal-subtitle">Llena tus datos y te enviamos el acceso al instante</div>
