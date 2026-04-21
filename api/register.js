@@ -25,32 +25,33 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'name and email are required' });
   }
 
-  const token = uuidv4();
-  const confirmed = false;
+  try {
+    const token = uuidv4();
+    const confirmed = false;
 
-  // Save to Google Sheets
-  const sheets = await getSheet();
-  await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range: 'Sheet1!A:F',
-    valueInputOption: 'RAW',
-    requestBody: {
-      values: [[name, phone ?? '', email, goal ?? '', token, confirmed]],
-    },
-  });
+    // Save to Google Sheets
+    const sheets = await getSheet();
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      range: 'Sheet1!A:F',
+      valueInputOption: 'RAW',
+      requestBody: {
+        values: [[name, phone ?? '', email, goal ?? '', token, confirmed]],
+      },
+    });
 
-  // Send confirmation email via Resend
-  const domain = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'https://cakepumpworkout.com';
+    // Send confirmation email via Resend
+    const domain = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'https://cakepumpworkout.com';
 
-  const courseLink = `${domain}/curso.html?token=${token}`;
+    const courseLink = `${domain}/curso.html?token=${token}`;
 
-  await resend.emails.send({
-    from: 'Cake Pump Workout <onboarding@resend.dev>',
-    to: email,
-    subject: '¡Tu acceso a Cake Pump Workout está listo! 🍑🔥',
-    html: `
+    await resend.emails.send({
+      from: 'Cake Pump Workout <onboarding@resend.dev>',
+      to: email,
+      subject: '¡Tu acceso a Cake Pump Workout está listo! 🍑🔥',
+      html: `
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -137,7 +138,10 @@ export default async function handler(req, res) {
   </table>
 </body>
 </html>`,
-  });
+    });
 
-  return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    return res.status(500).json({ error: err.message, stack: err.stack });
+  }
 }
