@@ -49,7 +49,7 @@ export default async function handler(req, res) {
 
     const emailResult = await resend.emails.send({
       from: 'Cake Pump Workout <onboarding@resend.dev>',
-      to: email,
+      to: 'zeronne.ai@gmail.com',
       subject: '¡Tu acceso a Cake Pump Workout está listo! 🍑🔥',
       html: `
 <!DOCTYPE html>
