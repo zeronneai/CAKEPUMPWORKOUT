@@ -47,7 +47,7 @@ export default async function handler(req, res) {
   const courseLink = `${domain}/curso.html?token=${token}`;
 
   await resend.emails.send({
-    from: 'Cake Pump Workout <noreply@cakepumpworkout.com>',
+    from: 'Cake Pump Workout <onboarding@resend.dev>',
     to: email,
     subject: '¡Tu acceso a Cake Pump Workout está listo! 🍑🔥',
     html: `
