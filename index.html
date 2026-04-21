@@ -1545,8 +1545,8 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeModal();
 });
 
-document.getElementById('modalForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
+async function submitModalForm() {
+  console.log('Submitting form...');
   const btn = document.getElementById('modalSubmitBtn');
   const errorEl = document.getElementById('modalError');
 
@@ -1554,30 +1554,36 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
   btn.disabled = true;
   btn.textContent = 'Enviando...';
 
+  const payload = {
+    name:  document.getElementById('m-name').value.trim(),
+    phone: document.getElementById('m-phone').value.trim(),
+    email: document.getElementById('m-email').value.trim(),
+    goal:  document.getElementById('m-goal').value,
+  };
+  console.log('Payload:', payload);
+
   try {
     const res = await fetch('/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name:  document.getElementById('m-name').value.trim(),
-        phone: document.getElementById('m-phone').value.trim(),
-        email: document.getElementById('m-email').value.trim(),
-        goal:  document.getElementById('m-goal').value,
-      }),
+      body: JSON.stringify(payload),
     });
-    if (!res.ok) throw new Error();
+    console.log('Response status:', res.status);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    if (!data.success) throw new Error();
+    console.log('Response data:', data);
+    if (!data.success) throw new Error('success=false');
 
     document.getElementById('modalFormWrap').style.display = 'none';
     document.getElementById('modalSuccess').style.display = 'block';
     setTimeout(closeModal, 3000);
-  } catch {
+  } catch (err) {
+    console.error('Register error:', err);
     errorEl.style.display = 'block';
     btn.disabled = false;
     btn.textContent = 'Quiero mi acceso gratis →';
   }
-});
+}
 // ─────────────────────────────────────────────────────
 </script>
 
@@ -1617,7 +1623,7 @@ document.getElementById('modalForm').addEventListener('submit', async function(e
           </div>
         </div>
         <div class="modal-error" id="modalError">Ocurrió un error. Por favor intenta de nuevo.</div>
-        <button type="submit" class="modal-submit" id="modalSubmitBtn">
+        <button type="button" class="modal-submit" id="modalSubmitBtn" onclick="submitModalForm()">
           Quiero mi acceso gratis →
         </button>
       </form>
