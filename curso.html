@@ -257,6 +257,88 @@
 </style>
 </head>
 <body>
+<style>
+  /* ── ACCESS GATE ── */
+  #accessGate {
+    display: none;
+    position: fixed; inset: 0; z-index: 9999;
+    background: #0F0509;
+    align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+  #accessGate.visible { display: flex; }
+  .gate-card {
+    text-align: center; padding: 3rem 2.5rem;
+    max-width: 420px; width: 90%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(232,82,106,0.25);
+    border-radius: 24px;
+  }
+  .gate-icon {
+    font-size: 3rem; margin-bottom: 1.2rem;
+    display: block;
+  }
+  .gate-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; letter-spacing: 0.06em;
+    color: #fff; margin-bottom: 0.6rem;
+  }
+  .gate-sub {
+    font-size: 0.92rem; color: rgba(255,255,255,0.55);
+    line-height: 1.65; margin-bottom: 2rem;
+  }
+  .gate-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #E8526A, #C93055);
+    color: #fff; text-decoration: none;
+    padding: 0.9rem 2rem; border-radius: 100px;
+    font-size: 0.95rem; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(200,48,85,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .gate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(200,48,85,0.45);
+  }
+  /* Loading shimmer while verifying */
+  #verifyingScreen {
+    display: flex;
+    position: fixed; inset: 0; z-index: 9998;
+    background: #0F0509;
+    align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .verify-spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid rgba(232,82,106,0.15);
+    border-top-color: #E8526A;
+    animation: vspin 0.75s linear infinite;
+  }
+  @keyframes vspin { to { transform: rotate(360deg); } }
+  /* Course content hidden until verified */
+  #courseContent { display: none; }
+</style>
+
+<!-- VERIFYING SCREEN -->
+<div id="verifyingScreen">
+  <div class="verify-spinner"></div>
+</div>
+
+<!-- INVALID ACCESS GATE -->
+<div id="accessGate">
+  <div class="gate-card">
+    <span class="gate-icon">🔒</span>
+    <div class="gate-title">Acceso no válido</div>
+    <p class="gate-sub">Este enlace no es válido o ya expiró. Para acceder al programa necesitas registrarte primero.</p>
+    <a href="index.html" class="gate-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12,19 5,12 12,5"/></svg>
+      Volver al inicio
+    </a>
+  </div>
+</div>
+
+<!-- COURSE CONTENT -->
+<div id="courseContent">
 
 <!-- TOP NAV -->
 <nav class="top-nav">
@@ -507,7 +589,44 @@
   </main>
 </div>
 
+</div><!-- /courseContent -->
+
 <script>
+// ── Token verification ──────────────────────────────────
+(async function verifyAccess() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+
+  if (!token) {
+    showGate();
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/verify?token=${encodeURIComponent(token)}`);
+    if (!res.ok) throw new Error('network');
+    const { valid } = await res.json();
+    if (valid) {
+      showCourse();
+    } else {
+      showGate();
+    }
+  } catch {
+    showGate();
+  }
+})();
+
+function showCourse() {
+  document.getElementById('verifyingScreen').style.display = 'none';
+  document.getElementById('courseContent').style.display = 'block';
+}
+
+function showGate() {
+  document.getElementById('verifyingScreen').style.display = 'none';
+  document.getElementById('accessGate').classList.add('visible');
+}
+// ───────────────────────────────────────────────────────
+
 let playing = false;
 
 function togglePlay(btn) {
