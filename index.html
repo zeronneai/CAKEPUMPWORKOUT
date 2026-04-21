@@ -895,6 +895,92 @@
   .modal-success-icon { font-size: 2.8rem; margin-bottom: 0.8rem; }
   .modal-success h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.4rem; }
   .modal-success p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* Section dividers */
+  .preview-section,
+  .benefits-section,
+  .modules-section,
+  .brenda-section,
+  .testimonials-section,
+  .pricing-section,
+  .register-section,
+  .faq-section {
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  /* Nav link hover — red underline slide */
+  .nav-links a {
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: #C8102E;
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* Module number large background */
+  .modules-inner {
+    position: relative;
+  }
+
+  /* Pricing glow pulse */
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.12; transform: translate(-50%,-50%) scale(1); }
+    50% { opacity: 0.2; transform: translate(-50%,-50%) scale(1.08); }
+  }
+  .pricing-glow {
+    animation: glowPulse 4s ease-in-out infinite;
+  }
+
+  /* Hero bottom fade */
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 120px;
+    background: linear-gradient(to top, #080808, transparent);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* Clip cards hover */
+  .clip-card {
+    transition: transform 0.4s cubic-bezier(0.25,0.8,0.25,1);
+  }
+  .clip-card:hover {
+    transform: scale(1.03) translateY(-6px);
+  }
+
+  /* Remove old reveal class opacity interference with GSAP */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Testimonials grid tighter */
+  .testimonials-track {
+    gap: 1rem;
+  }
+
+  /* Footer minimal */
+  footer {
+    padding: 3rem 2.5rem 2rem;
+    background: #080808;
+  }
+
+  /* Module item left border transition */
+  .module-item {
+    transition: padding-left 0.3s ease, border-left 0.3s ease;
+    border-left: 3px solid transparent;
+  }
+  .module-item:hover {
+    border-left: 3px solid #C8102E;
+  }
 </style>
 </head>
 <body>
