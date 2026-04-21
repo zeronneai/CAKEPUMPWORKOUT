@@ -47,7 +47,7 @@ export default async function handler(req, res) {
 
     const courseLink = `${domain}/curso.html?token=${token}`;
 
-    await resend.emails.send({
+    const emailResult = await resend.emails.send({
       from: 'Cake Pump Workout <onboarding@resend.dev>',
       to: email,
       subject: '¡Tu acceso a Cake Pump Workout está listo! 🍑🔥',
@@ -139,6 +139,7 @@ export default async function handler(req, res) {
 </body>
 </html>`,
     });
+    console.log('Resend result:', JSON.stringify(emailResult));
 
     return res.status(200).json({ success: true });
   } catch (err) {
