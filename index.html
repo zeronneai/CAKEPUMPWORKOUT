@@ -1574,9 +1574,7 @@ async function submitModalForm() {
     console.log('Response data:', data);
     if (!data.success) throw new Error('success=false');
 
-    document.getElementById('modalFormWrap').style.display = 'none';
-    document.getElementById('modalSuccess').style.display = 'block';
-    setTimeout(closeModal, 3000);
+    setTimeout(() => { window.location.href = 'curso.html'; }, 1000);
   } catch (err) {
     console.error('Register error:', err);
     errorEl.style.display = 'block';
