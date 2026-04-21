@@ -23,10 +23,10 @@ export default async function handler(req, res) {
   const sheets = await getSheet();
   const spreadsheetId = process.env.GOOGLE_SHEET_ID;
 
-  // Read all rows from Sheet1
+  // Read all rows from Hoja 1
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: 'Sheet1!A:F',
+    range: 'Hoja 1!A:F',
   });
 
   const rows = response.data.values ?? [];
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
 
   await sheets.spreadsheets.values.update({
     spreadsheetId,
-    range: `Sheet1!F${sheetRow}`,
+    range: `Hoja 1!F${sheetRow}`,
     valueInputOption: 'RAW',
     requestBody: { values: [['true']] },
   });
