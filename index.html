@@ -831,21 +831,157 @@
   .cd-sep { font-family:'Unbounded',sans-serif; font-size:1.5rem; color:var(--rose); margin-top:-4px; }
 
   /* ─── RESPONSIVE ──────────────────────────── */
+
+  /* Large tablet */
+  @media (max-width: 1100px) {
+    .hero-content { max-width: 65%; }
+    .brenda-section { gap: 3.5rem; }
+    .testimonials-track { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  }
+
+  /* Tablet */
   @media (max-width: 900px) {
-    .hero-content { padding: 8rem 1.5rem 4rem; }
-    .hero-image-side { opacity: 0.3; }
+    /* Nav */
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .nav-logo { font-size: 1.2rem; }
+
+    /* Hero */
+    .hero { min-height: 100svh; }
+    .hero-content { max-width: 100%; padding: 7rem 1.5rem 14rem; z-index: 3; }
+    .hero-image-side {
+      width: 100%; height: 60vh;
+      top: auto; bottom: 0; opacity: 0.22; z-index: 1;
+    }
+    .hero-image-side::before {
+      width: 100%; height: 60%;
+      background: linear-gradient(to bottom, #07050F 0%, rgba(7,5,16,0.4) 100%);
+      top: 0; bottom: auto;
+    }
+    .hero-bg-word { font-size: clamp(8rem, 18vw, 16rem); right: -5%; }
+    .hero-grid-line { display: none; }
+    .hero h1 { font-size: clamp(4.5rem, 13vw, 8rem); }
+    .hero-free-pill { font-size: 0.62rem; padding: 0.5rem 1rem; letter-spacing: 0.1em; }
+    .hero-stats { gap: 0; }
+    .hero-stat-item { padding-right: 1.2rem; margin-right: 1.2rem; }
+    .stat-num { font-size: 2.4rem; }
+
+    /* Sections */
+    .section-title { font-size: clamp(2rem, 6vw, 3.5rem); }
+    .preview-section { padding: 5rem 1.5rem; }
     .clips-grid { grid-template-columns: 1fr 1fr; }
     .clip-card:first-child { grid-column: span 2; aspect-ratio: 16/9; min-height: auto; }
-    .benefits-grid { grid-template-columns: 1fr; }
-    .brenda-section { grid-template-columns: 1fr; gap: 3rem; }
-    .testimonials-track { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    .hero-stats { gap: 1.5rem; }
+    .benefits-section { padding: 5rem 1.5rem; }
+    .benefits-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .modules-section { padding: 5rem 1.5rem; }
+    .brenda-section { grid-template-columns: 1fr; gap: 2.5rem; padding: 5rem 1.5rem; }
+    .brenda-quote { font-size: 1.2rem; }
+    .testimonials-section { padding: 5rem 1.5rem; }
+    .testimonials-track { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .cta-banner-section { padding: 5rem 1.5rem; }
+    .cta-banner-title { font-size: clamp(3rem, 11vw, 7rem); }
+    .cta-banner-features { gap: 1.2rem; }
+    .register-section { padding: 5rem 1.5rem 6rem; }
+    .register-card { padding: 2rem 1.5rem; }
+    .faq-section { padding: 5rem 1.5rem; }
+    footer { padding: 3rem 1.5rem 2rem; }
   }
+
+  /* Mobile */
   @media (max-width: 600px) {
-    .clips-grid { grid-template-columns: 1fr; }
-    .clip-card:first-child { grid-column: span 1; aspect-ratio: 9/16; }
-    nav { padding: 1.25rem 1.5rem; }
+    /* Nav */
+    nav { padding: 0.9rem 1.2rem; }
+    .nav-logo { font-size: 1rem; letter-spacing: 0; }
+
+    /* Hero */
+    .hero-content { padding: 6rem 1.2rem 12rem; }
+    .hero-image-side { height: 52vh; }
+    .hero-bg-word { display: none; }
+    .hero h1 { font-size: clamp(3.8rem, 14vw, 6rem); line-height: 0.85; }
+    .hero-badge { font-size: 0.6rem; padding: 0.35rem 0.85rem; letter-spacing: 0.12em; }
+    .hero-free-pill {
+      font-size: 0.56rem; padding: 0.42rem 0.75rem;
+      letter-spacing: 0.08em; gap: 0.4rem;
+    }
+    .hero-sub { font-size: 0.9rem; max-width: 100%; }
+    .hero-actions { flex-direction: column; gap: 0.7rem; }
+    .hero-actions .btn-primary,
+    .hero-actions .btn-secondary { width: 100%; justify-content: center; }
+    .hero-stats { margin-top: 2rem; padding-top: 1.5rem; }
+    .hero-stat-item { padding-right: 0.8rem; margin-right: 0.8rem; }
+    .stat-num { font-size: 1.9rem; }
+    .stat-label { font-size: 0.56rem; letter-spacing: 0.1em; }
+
+    /* Section titles */
+    .section-title { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+    .section-sub { font-size: 0.92rem; }
+
+    /* Preview clips */
+    .preview-section { padding: 4rem 1.2rem; }
+    .clips-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .clip-card:first-child { grid-column: span 1; aspect-ratio: 3/4; }
+
+    /* Benefits */
+    .benefits-section { padding: 4rem 1.2rem; }
+    .benefits-grid { grid-template-columns: 1fr; gap: 0.85rem; }
+    .benefit-card { padding: 1.6rem; }
+
+    /* Modules */
+    .modules-section { padding: 4rem 1.2rem; }
+    .module-item { flex-wrap: wrap; gap: 0.4rem 1rem; }
+    .module-num { font-size: 2rem; min-width: 44px; }
+    .module-content { flex: 1; min-width: 0; }
+    .module-duration { width: 100%; text-align: left; padding-top: 0; }
+
+    /* Brenda */
+    .brenda-section { padding: 4rem 1.2rem; gap: 2rem; }
+    .brenda-img-placeholder { aspect-ratio: 4/5; }
+    .brenda-quote { font-size: 1.05rem; }
+    .brenda-socials { flex-wrap: wrap; gap: 0.75rem; }
+    .brenda-socials .btn-primary { width: 100%; justify-content: center; }
+
+    /* Testimonials */
+    .testimonials-section { padding: 4rem 1.2rem; }
+    .testimonials-track { grid-template-columns: 1fr; }
+    .testi-card { padding: 1.5rem; }
+
+    /* CTA Banner */
+    .cta-banner-section { padding: 4rem 1.2rem; }
+    .cta-banner-title { font-size: clamp(2.4rem, 13vw, 4rem); line-height: 0.9; }
+    .cta-banner-sub { font-size: 0.95rem; }
+    .cta-banner-btn { width: 100%; justify-content: center; font-size: 0.95rem !important; padding: 1rem 1.5rem !important; }
+    .cta-banner-features { flex-direction: column; align-items: flex-start; gap: 0.6rem; padding: 0 0.5rem; }
+
+    /* Register */
+    .register-section { padding: 4rem 1.2rem 5rem; }
+    .register-card { padding: 1.5rem 1.2rem; }
+    .register-inner { max-width: 100%; }
+
+    /* FAQ */
+    .faq-section { padding: 4rem 1.2rem; }
+    .faq-question { font-size: 0.9rem; }
+
+    /* Footer */
+    footer { padding: 2.5rem 1.2rem 1.5rem; }
+    .footer-logo { font-size: 1.3rem; }
+    .footer-links { gap: 0.8rem; font-size: 0.78rem; }
+
+    /* Floating CTA */
+    .floating-cta { width: calc(100% - 2rem); left: 1rem; transform: none; }
+    .floating-cta.show { transform: none; }
+    .floating-cta-inner { justify-content: space-between; padding: 0.7rem 1rem; }
+
+    /* Modal */
+    .modal-box { padding: 2rem 1.2rem 1.5rem; }
+    .modal-title { font-size: 1.5rem; }
+  }
+
+  /* Very small */
+  @media (max-width: 380px) {
+    .hero h1 { font-size: 3.5rem; }
+    .hero-stat-item { padding-right: 0.6rem; margin-right: 0.6rem; }
+    .stat-num { font-size: 1.6rem; }
+    .section-title { font-size: 1.7rem; }
   }
 
   /* ─── MODAL ──────────────────────────────── */
@@ -1093,6 +1229,52 @@
   .module-item:hover {
     border-left: 3px solid #8B31E0;
   }
+
+  /* ─── TITLE HEARTBEAT + SHINE ─────────────── */
+  .hero-title-wrap {
+    position: relative;
+    overflow: hidden;
+    /* padding creates buffer so scale doesn't clip */
+    padding: 0.25em 0.1em 0.18em 0;
+    margin: -0.25em -0.1em -0.18em 0;
+  }
+  @keyframes titleHeartbeat {
+    0%, 100% { transform: scale(1);     filter: drop-shadow(0 0 0px transparent); }
+    7%        { transform: scale(1.028); filter: drop-shadow(0 0 18px rgba(192,132,252,0.55)); }
+    14%       { transform: scale(0.996); filter: drop-shadow(0 0 4px transparent); }
+    22%       { transform: scale(1.018); filter: drop-shadow(0 0 12px rgba(139,49,224,0.4)); }
+    30%       { transform: scale(1);     filter: drop-shadow(0 0 0px transparent); }
+  }
+  .hero h1 {
+    animation: titleHeartbeat 3.4s ease-in-out 2.2s infinite;
+    transform-origin: left center;
+  }
+  /* Shine sweep — diagonal white/purple glint */
+  @keyframes titleShine {
+    0%   { left: -65%; opacity: 0; }
+    6%   { opacity: 1; }
+    44%  { left: 125%; opacity: 0.9; }
+    52%  { left: 125%; opacity: 0; }
+    100% { left: 125%; opacity: 0; }
+  }
+  .hero-title-wrap::after {
+    content: '';
+    position: absolute;
+    top: -5%; left: -65%;
+    width: 32%; height: 110%;
+    background: linear-gradient(
+      105deg,
+      transparent 10%,
+      rgba(255,255,255,0.04) 35%,
+      rgba(255,255,255,0.18) 50%,
+      rgba(192,132,252,0.14) 58%,
+      transparent 78%
+    );
+    transform: skewX(-10deg);
+    animation: titleShine 5s ease-in-out 2.5s infinite;
+    pointer-events: none;
+    z-index: 5;
+  }
 </style>
 </head>
 <body>
@@ -1140,11 +1322,13 @@
       <span class="badge-dot"></span>
       Acceso 100% gratuito · Solo por tiempo limitado
     </div>
-    <h1>
-      <span class="hw hw1">CAKE</span>
-      <span class="hw hw2">PUMP</span>
-      <em class="hw hw3">Workout</em>
-    </h1>
+    <div class="hero-title-wrap">
+      <h1>
+        <span class="hw hw1">CAKE</span>
+        <span class="hw hw2">PUMP</span>
+        <em class="hw hw3">Workout</em>
+      </h1>
+    </div>
     <div class="hero-free-pill" id="heroFreePill">
       <span class="free-pill-icon">✦</span>
       <span>ACCESO GRATIS — SOLO REGÍSTRATE</span>
